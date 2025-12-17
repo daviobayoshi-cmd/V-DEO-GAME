@@ -39,12 +39,6 @@ jobs:
           echo "ANDROID_NDK_HOME=$HOME/android-sdk/ndk/25.2.9519653" >> $GITHUB_ENV
           echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH" >> $GITHUB_ENV
 
-      - name: Update Gradle Wrapper
-        run: |
-          cd phoenix
-          chmod +x ./gradlew
-          ./gradlew wrapper --gradle-version 8.3 --distribution-type all
-
       - name: Fetch RetroArch and cores
         run: |
           git clone https://github.com/libretro/libretro-super.git
@@ -55,6 +49,12 @@ jobs:
       - name: Copy Phoenix launcher to project
         run: |
           cp -r phoenix ./libretro-super/retroarch/android/app
+
+      - name: Update Gradle Wrapper
+        run: |
+          cd libretro-super/retroarch/android/app
+          chmod +x ./gradlew
+          ./gradlew wrapper --gradle-version 8.3 --distribution-type all
 
       - name: Build RetroArch APK
         run: |
