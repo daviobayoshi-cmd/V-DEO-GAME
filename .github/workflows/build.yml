@@ -40,7 +40,10 @@ jobs:
           echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH" >> $GITHUB_ENV
 
       - name: Update Gradle Wrapper
-        run: ./gradlew wrapper --gradle-version 8.3 --distribution-type all
+        run: |
+          cd phoenix
+          chmod +x ./gradlew
+          ./gradlew wrapper --gradle-version 8.3 --distribution-type all
 
       - name: Fetch RetroArch and cores
         run: |
@@ -56,6 +59,7 @@ jobs:
       - name: Build RetroArch APK
         run: |
           cd libretro-super/retroarch/android/app
+          chmod +x ./gradlew
           ./gradlew assembleRelease --stacktrace
 
       - name: Upload APK artifact
