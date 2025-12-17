@@ -25,7 +25,7 @@ jobs:
 
       # 3. Instalar dependências básicas
       - name: Install dependencies
-        run: sudo apt-get update && sudo apt-get install -y unzip wget git cmake build-essential
+        run: sudo apt-get update && sudo apt-get install -y unzip wget git build-essential
 
       # 4. Instalar Android SDK & NDK
       - name: Download Android SDK & NDK
@@ -44,30 +44,27 @@ jobs:
           echo "ANDROID_NDK_HOME=$HOME/android-sdk/ndk/25.2.9519653" >> $GITHUB_ENV
           echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH" >> $GITHUB_ENV
 
-      # 6. Clonar apenas RetroArch Android
+      # 6. Clonar apenas RetroArch Android (sem cores e assets)
       - name: Clone RetroArch Android
         run: |
-          mkdir -p libretro-super
-          git clone https://github.com/libretro/RetroArch.git libretro-super/retroarch
-          cd libretro-super/retroarch
-          git submodule update --init --recursive --depth 1
+          git clone https://github.com/libretro/RetroArch.git retroarch
 
-      # 7. Copiar Phoenix launcher (assumindo que está na raiz)
+      # 7. Copiar Phoenix launcher para o projeto (assume raiz do repo)
       - name: Copy Phoenix launcher
         run: |
-          cp -r phoenix ./libretro-super/retroarch/android/app
+          cp -r phoenix retroarch/android/app
 
       # 8. Atualizar Gradle Wrapper
       - name: Update Gradle Wrapper
         run: |
-          cd libretro-super/retroarch/android/app
+          cd retroarch/android/app
           chmod +x ./gradlew
           ./gradlew wrapper --gradle-version 8.3 --distribution-type all
 
       # 9. Compilar APK
       - name: Build RetroArch APK
         run: |
-          cd libretro-super/retroarch/android/app
+          cd retroarch/android/app
           chmod +x ./gradlew
           ./gradlew assembleRelease --stacktrace
 
