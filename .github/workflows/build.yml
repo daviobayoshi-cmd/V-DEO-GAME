@@ -39,12 +39,15 @@ jobs:
           echo "ANDROID_NDK_HOME=$HOME/android-sdk/ndk/25.2.9519653" >> $GITHUB_ENV
           echo "PATH=$HOME/android-sdk/cmdline-tools/latest/bin:$HOME/android-sdk/platform-tools:$PATH" >> $GITHUB_ENV
 
-      - name: Fetch RetroArch and cores
+      - name: Clean libretro-super
+        run: rm -rf libretro-super || true
+
+      - name: Fetch RetroArch
         run: |
           git clone https://github.com/libretro/libretro-super.git
           cd libretro-super
           ./libretro-fetch.sh --retroarch
-          ./libretro-fetch.sh --all
+          git submodule update --init --recursive
 
       - name: Copy Phoenix launcher to project
         run: |
